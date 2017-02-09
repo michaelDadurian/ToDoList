@@ -49,5 +49,46 @@
     }
 %>
 
+<%
+    Key<ToDoList> to_do_list = Key.create(ToDoList.class, list_name);
+
+    List<ItemsInList> items_in_list = ObjectifyService.ofy()
+        .load()
+        .type(ItemsInList.class)
+        .ancestor(to_do_list)
+        .order("-date")
+        .list();
+
+    if (items_in_list.isEmpty()){
+
+%>
+<p> List '${fn:escapeXml(list_name)}' has not entries.</p>
+<%
+    } else {
+%>
+<p> To Do: </p>
+<%
+    for (ItemsInList item : items_in_list) {
+        pageContext.setAttribute("item_category", item.getCategory());
+        pageContext.setAttribute("item_description", item.getDescription());
+
+%>
+<p>item category: '${fn:escapeXml(item_category)}'
+   item_description: '${fn:escapeXml(item_description)}'</p>
+<%
+    }
+   }
+%>
+
+<form action="/sign" method="post">
+    <div><textarea name="content" rows="3" cols="60"></textarea></div>
+    <div><input type="submit" value="List Name:"/></div>
+    <input type="hidden" name="list_name" value="${fn:escapeXml(list_name)}"/>
+</form>
+<form action="/to_do_list.jsp" method="get">
+    <div><input type="text" name="list_name" value="${fn:escapeXml(list_name)}"/></div>
+    <div><input type="submit" value="Switch List"/></div>
+</form>
+
 </body>
 </html>
