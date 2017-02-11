@@ -59,6 +59,8 @@ public class HomeController {
         datastore.put(greeting);
 
         model.addAttribute("guestbookName", guestbookName);
+
+
         return "guestbook";
     }
 
@@ -83,8 +85,7 @@ public class HomeController {
                 .getDatastoreService();
         datastore.put(ListList);
 
-        model.addAttribute("guestbookName", listName);
-        return "guestbook";
+        return "redirect:/";
 
 
     }
