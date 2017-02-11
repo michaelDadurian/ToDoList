@@ -62,6 +62,30 @@ public class HomeController {
         return "guestbook";
     }
 
+    @RequestMapping("/add")
+    public String listAdder(
+            @RequestParam(required = true, value = "listNameInput") String listName,
+            @RequestParam(required = true, value = "listVisibility") String visibility,
+
+            Model model) {
+        UserService userService = UserServiceFactory.getUserService();
+
+        System.out.println("asd" + listName + "ssd");
+
+        Key listKey = KeyFactory.createKey("ListList", listName);
+
+        Entity ListList = new Entity("ListList", listKey);
+        ListList.setProperty("user", userService.getCurrentUser());
+        ListList.setProperty("ListName", listName);
+        ListList.setProperty("Visibility", visibility);
+
+        DatastoreService datastore = DatastoreServiceFactory
+                .getDatastoreService();
+        datastore.put(ListList);
+
+        model.addAttribute("guestbookName", listName);
+        return "guestbook";
 
 
+    }
 }

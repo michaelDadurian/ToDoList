@@ -43,6 +43,46 @@
     }
 %>
 
+<%-- Start of adding new lists --%>
+
+<div name = "listNameTest">
+    <form action="/add" method="post">
+
+        <%-- Does not handle empty list name --%>
+        Name of To Do List: <input type="text" name="listNameInput">
+
+        <input type="radio" name="listVisibility" value="public"> Public
+        <input type="radio" name="listVisibility" value="private"> Private
+        <br>
+        <input type="submit" name = "listNameSubmit" value="Submit">
+
+    </form>
+
+    <%
+        String listName = request.getParameter("listNameInput");
+        if (listName == null || listName == "") {
+            listName = "defaultListName";
+        }
+        pageContext.setAttribute("defaultListName", listName);
+        System.out.println("List Name: " + listName);
+    %>
+
+    <%
+        DatastoreService listList = DatastoreServiceFactory.getDatastoreService();
+        Key listKey = KeyFactory.createKey("ListList", listName);
+        // Run an ancestor query to ensure we see the most up-to-date
+        Query listQuery = new Query("HelloList", listKey).addSort("date", Query.SortDirection.DESCENDING);
+
+
+    %>
+
+
+</div>
+
+<%-- End of adding new lists --%>
+
+
+<div name = "guestBookTest">
 <%
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Key guestbookKey = KeyFactory.createKey("Guestbook", guestbookName);
@@ -52,6 +92,7 @@
     List<Entity> greetings = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(5));
     if (greetings.isEmpty()) {
 %>
+
 <p>Guestbook '${fn:escapeXml(guestbookName)}' has no messages.</p>
 <%
 } else {
@@ -89,6 +130,9 @@
     <div><input type="text" name="guestbookName" value="${fn:escapeXml(guestbookName)}"/></div>
     <div><input type="submit" value="Switch Guestbook"/></div>
 </form>
+</div>
+
+
 
 </body>
 </html>
