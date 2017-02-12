@@ -78,59 +78,44 @@
 
 
 </div>
-
 <%-- End of adding new lists --%>
 
 
-<div name = "guestBookTest">
-<%
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Key guestbookKey = KeyFactory.createKey("Guestbook", guestbookName);
-    // Run an ancestor query to ensure we see the most up-to-date
-    // view of the Greetings belonging to the selected Guestbook.
-    Query query = new Query("Greeting", guestbookKey).addSort("date", Query.SortDirection.DESCENDING);
-    List<Entity> greetings = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(5));
-    if (greetings.isEmpty()) {
-%>
 
-<p>Guestbook '${fn:escapeXml(guestbookName)}' has no messages.</p>
-<%
-} else {
-%>
-<p>Messages in Guestbook '${fn:escapeXml(guestbookName)}'.</p>
-<%
-    for (Entity greeting : greetings) {
-        pageContext.setAttribute("greeting_content",
-                greeting.getProperty("content"));
-        if (greeting.getProperty("user") == null) {
-%>
-<p>An anonymous person wrote:</p>
-<%
-} else {
-    pageContext.setAttribute("greeting_user",
-            greeting.getProperty("user"));
-%>
-<p><b>${fn:escapeXml(greeting_user.nickname)}</b> wrote:</p>
-<%
-    }
-%>
-<blockquote>${fn:escapeXml(greeting_content)}</blockquote>
-<%
+<%-- Start of display list  --%>
+
+<div name= "displayList">
+    <form action="/display" method="get">
+
+    <%
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Key todolistKey = KeyFactory.createKey("ListList", "ass");
+        Query query = new Query("ListList", todolistKey);
+        List<Entity> lists = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(5));
+        if (lists.isEmpty()){
+    %>
+
+        <p>No lists</p>
+    <%
+        }else {
+            for (Entity ListList : lists){
+                if (ListList.getProperty("listVisibility") == "public"){
+                    pageContext.setAttribute("listName", ListList.getProperty("ListName"));
+
+    %>
+                <p>name of list: '${fn:escapeXml(listName)}'</p>
+
+    <%     }
         }
-    }
-%>
+      }
 
-<form action="/sign" method="post">
-    <div><textarea name="content" rows="3" cols="60"></textarea></div>
-    <div><input type="submit" value="Post Greeting"/></div>
-    <input type="hidden" name="guestbookName" value="${fn:escapeXml(guestbookName)}"/>
-</form>
+    %>
 
-<form action="/" method="get">
-    <div><input type="text" name="guestbookName" value="${fn:escapeXml(guestbookName)}"/></div>
-    <div><input type="submit" value="Switch Guestbook"/></div>
-</form>
-</div>
+    </form>
+     </div>
+
+
+
 
 
 
