@@ -52,7 +52,7 @@
         Name of To Do List: <input type="text" name="listNameInput">
 
         <input type="radio" name="listVisibility" value="public"> Public
-        <input type="radio" name="listVisibility" value="private"> Private
+        <input type="radio" name="listVisibility" value="private" checked = "checked""> Private
         <br>
         <input type="submit" name = "listNameSubmit" value="Submit">
 
@@ -89,21 +89,27 @@
 
     <%
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Key todolistKey = KeyFactory.createKey("ListList", "ass");
-        Query query = new Query("ListList", todolistKey);
-        List<Entity> lists = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(5));
+        Key todolistKey = KeyFactory.createKey("ListList", listName);
+        Query query = new Query("ListList");
+        List<Entity> lists = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(1111111));
+
         if (lists.isEmpty()){
     %>
 
         <p>No lists</p>
+
     <%
-        }else {
+        } else {
             for (Entity ListList : lists){
-                if (ListList.getProperty("listVisibility") == "public"){
+                if (ListList.getProperty("Visibility").equals("public") ||
+                    ListList.getProperty("user").equals(user)){
                     pageContext.setAttribute("listName", ListList.getProperty("ListName"));
 
+                    System.out.println(ListList.getProperty("ListName") + "\t" + ListList.getProperty("Visibility") +
+                        "\t" + user);
+
     %>
-                <p>name of list: '${fn:escapeXml(listName)}'</p>
+                <tr><td>${fn:escapeXml(listName)}</td></tr><br>
 
     <%     }
         }
@@ -113,6 +119,8 @@
 
     </form>
      </div>
+
+<%-- End of display list  --%>
 
 
 

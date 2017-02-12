@@ -34,8 +34,6 @@ public class HomeController {
             Model model) {
         UserService userService = UserServiceFactory.getUserService();
 
-        System.out.println("asd" + listName + "ssd");
-
         Key listKey = KeyFactory.createKey("ListList", listName);
 
         Entity ListList = new Entity("ListList", listKey);
