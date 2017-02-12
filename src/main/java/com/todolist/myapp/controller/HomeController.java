@@ -2,17 +2,13 @@ package com.todolist.myapp.controller;
 
 import java.util.Date;
 
+import com.google.appengine.api.datastore.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -65,6 +61,26 @@ public class HomeController {
 
         return "redirect:/";
 
+
+    }
+
+    @RequestMapping("/edit")
+    public String listEdit(@RequestParam(required = true, value = "listNameInput") String listName,
+                           @RequestParam(required = true, value = "listVisibility") String visibility) throws EntityNotFoundException {
+
+        UserService userService = UserServiceFactory.getUserService();
+
+        Key listKey = KeyFactory.createKey("ListList", listName);
+        DatastoreService datastore = DatastoreServiceFactory
+                .getDatastoreService();
+
+        Entity currList = datastore.get(listKey);
+        currList.setProperty("ListName", listName);
+        currList.setProperty("Visibility", visibility);
+
+        datastore.put(currList);
+
+        return "redirect:/";
 
     }
 }

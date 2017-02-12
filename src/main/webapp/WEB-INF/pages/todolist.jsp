@@ -85,7 +85,7 @@
 <%-- Start of display list  --%>
 
 <div name= "displayList">
-    <form action="/display" method="get">
+
 
     <%
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -125,8 +125,11 @@
                 <%
                     if(ListList.getProperty("user").equals(user)){
                 %>
-                    <button class="edit_btn">edit</button>
+                    <form action="/edit" method="get">
+                        <button class="edit_btn">edit</button>
+                    </form>
                     <button class="delete_btn">delete</button>
+
                 <%}%>
                 </td>
               </tr>
