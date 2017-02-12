@@ -114,7 +114,7 @@
                    visibility: '${fn:escapeXml(listVisibility)}'
                    user: '${fn:escapeXml(user)}'</p>
 
-                <tr><td>${fn:escapeXml(listName)}</td></tr><br>
+              
 
     <%     }
         }
