@@ -61,6 +61,28 @@ public class HomeController {
 
         return "redirect:/";
 
+    }
+
+    @RequestMapping("/deleteList")
+    public String listDelete(
+            @RequestParam(required = true, value = "listDelHid") String listName,
+            Model model) {
+        UserService userService = UserServiceFactory.getUserService();
+
+        System.out.println(listName + " " + userService.getCurrentUser());
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query deleteQuery = new Query("ListList");
+        deleteQuery.addFilter("ListName", Query.FilterOperator.EQUAL, listName);
+        deleteQuery.addFilter("user", Query.FilterOperator.EQUAL, userService.getCurrentUser());
+        PreparedQuery pq = datastore.prepare(deleteQuery);
+        Entity listEntity = pq.asSingleEntity();
+
+        datastore.delete(listEntity.getKey());
+
+        Key listKey = KeyFactory.createKey("ListList", listName);
+
+        return "redirect:/";
 
     }
 
@@ -84,3 +106,4 @@ public class HomeController {
 
     }
 }
+

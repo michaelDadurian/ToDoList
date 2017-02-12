@@ -52,7 +52,7 @@
         Name of To Do List: <input type="text" name="listNameInput">
 
         <input type="radio" name="listVisibility" value="public"> Public
-        <input type="radio" name="listVisibility" value="private" checked = "checked""> Private
+        <input type="radio" name="listVisibility" value="private" checked = "checked"> Private
         <br>
         <input type="submit" name = "listNameSubmit" value="Submit">
 
@@ -125,11 +125,21 @@
                 <%
                     if(ListList.getProperty("user").equals(user)){
                 %>
+<<<<<<< HEAD
+                    <form style = "display:inline">
+                        <button name = "edit_btn">edit</button>
+                    </form>
+                    <form action="/deleteList" method="post" style = "display:inline">
+                        <input type = "hidden" name = "listDelHid" value = "${fn:escapeXml(listName)}">
+                        <input type = "submit" class = "delete_btn" value = "delete">
+                    </form>
+=======
                     <form action="/edit" method="get">
                         <button class="edit_btn">edit</button>
                     </form>
                     <button class="delete_btn">delete</button>
 
+>>>>>>> d45a856a6c35b80e17dc1900862fe22b1769b745
                 <%}%>
                 </td>
               </tr>
