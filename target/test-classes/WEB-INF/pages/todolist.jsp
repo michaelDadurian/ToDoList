@@ -85,7 +85,7 @@
 <%-- Start of display list  --%>
 
 <div name= "displayList">
-    <form action="/display" method="get">
+    
 
     <%
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -125,6 +125,7 @@
                 <%
                     if(ListList.getProperty("user").equals(user)){
                 %>
+<<<<<<< HEAD
                     <form style = "display:inline">
                         <button name = "edit_btn">edit</button>
                     </form>
@@ -132,6 +133,13 @@
                         <input type = "hidden" name = "listDelHid" value = "${fn:escapeXml(listName)}">
                         <input type = "submit" class = "delete_btn" value = "delete">
                     </form>
+=======
+                    <form action="/edit" method="get">
+                        <button class="edit_btn">edit</button>
+                    </form>
+                    <button class="delete_btn">delete</button>
+
+>>>>>>> d45a856a6c35b80e17dc1900862fe22b1769b745
                 <%}%>
                 </td>
               </tr>

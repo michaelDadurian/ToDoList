@@ -85,5 +85,25 @@ public class HomeController {
         return "redirect:/";
 
     }
+
+    @RequestMapping("/edit")
+    public String listEdit(@RequestParam(required = true, value = "listNameInput") String listName,
+                           @RequestParam(required = true, value = "listVisibility") String visibility) throws EntityNotFoundException {
+
+        UserService userService = UserServiceFactory.getUserService();
+
+        Key listKey = KeyFactory.createKey("ListList", listName);
+        DatastoreService datastore = DatastoreServiceFactory
+                .getDatastoreService();
+
+        Entity currList = datastore.get(listKey);
+        currList.setProperty("ListName", listName);
+        currList.setProperty("Visibility", visibility);
+
+        datastore.put(currList);
+
+        return "redirect:/";
+
+    }
 }
 
