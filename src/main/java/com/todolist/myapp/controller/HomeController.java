@@ -2,17 +2,13 @@ package com.todolist.myapp.controller;
 
 import java.util.Date;
 
+import com.google.appengine.api.datastore.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -65,6 +61,29 @@ public class HomeController {
 
         return "redirect:/";
 
+    }
+
+    @RequestMapping("/deleteList")
+    public String listDelete(
+            @RequestParam(required = true, value = "listDelHid") String listName,
+            Model model) {
+        UserService userService = UserServiceFactory.getUserService();
+
+        System.out.println(listName + " " + userService.getCurrentUser());
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query deleteQuery = new Query("ListList");
+        deleteQuery.addFilter("ListName", Query.FilterOperator.EQUAL, listName);
+        deleteQuery.addFilter("user", Query.FilterOperator.EQUAL, userService.getCurrentUser());
+        PreparedQuery pq = datastore.prepare(deleteQuery);
+        Entity listEntity = pq.asSingleEntity();
+
+        datastore.delete(listEntity.getKey());
+
+        Key listKey = KeyFactory.createKey("ListList", listName);
+
+        return "redirect:/";
 
     }
 }
+
