@@ -22,7 +22,7 @@ public class HomeController {
 
     @RequestMapping("/")
     public String home() {
-        return "guestbook";
+        return "todolist";
     }
 
     @RequestMapping("/loggedIn")
@@ -34,7 +34,7 @@ public class HomeController {
             return new ModelAndView("redirect:"
                     + userService.createLoginURL("/"));
         } else {
-            return new ModelAndView("guestbook", "welcomeMsg", "You are authenticated, "
+            return new ModelAndView("todolist", "welcomeMsg", "You are authenticated, "
                     + currentUser.getNickname());
         }
     }
@@ -61,7 +61,7 @@ public class HomeController {
         model.addAttribute("guestbookName", guestbookName);
 
 
-        return "guestbook";
+        return "todolist";
     }
 
     @RequestMapping("/add")
