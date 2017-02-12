@@ -80,7 +80,7 @@ public class HomeController {
 
         datastore.put(currList);
 
-        return "redirect:/";
+        return "edit";
 
     }
 }
