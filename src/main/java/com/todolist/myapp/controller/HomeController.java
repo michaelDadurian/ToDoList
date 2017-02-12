@@ -87,23 +87,54 @@ public class HomeController {
     }
 
     @RequestMapping("/edit")
-    public String listEdit(@RequestParam(required = true, value = "listNameInput") String listName,
-                           @RequestParam(required = true, value = "listVisibility") String visibility) throws EntityNotFoundException {
+    public String listEdit( @RequestParam(required = true, value = "user") String user,
+                            @RequestParam(required = true, value = "listNameInput") String listName,
+                            @RequestParam(required = true, value = "listVisibility") String visibility) throws EntityNotFoundException {
 
         UserService userService = UserServiceFactory.getUserService();
 
-        Key listKey = KeyFactory.createKey("ListList", listName);
-        DatastoreService datastore = DatastoreServiceFactory
-                .getDatastoreService();
+        //Key listKey = KeyFactory.createKey("ListList", listName);
+        //DatastoreService datastore = DatastoreServiceFactory
+        //        .getDatastoreService();
 
-        Entity currList = datastore.get(listKey);
-        currList.setProperty("ListName", listName);
-        currList.setProperty("Visibility", visibility);
+        //Entity currList = datastore.get(listKey);
+        //currList.setProperty("ListName", listName);
+        //currList.setProperty("Visibility", visibility);
 
-        datastore.put(currList);
+        //datastore.put(currList);
 
         return "edit";
 
     }
+
+    @RequestMapping("/addToDo")
+    public String listAddToDo( @RequestParam(required = true, value = "user") String user,
+                               @RequestParam(required = true, value = "listNameInput") String listName,
+                               @RequestParam(required = true, value = "listContent") String content
+        ) throws EntityNotFoundException {
+
+        System.out.println("User "+user);
+        System.out.println("listNameInput "+listName);
+        System.out.println("listContent "+content);
+
+        UserService userService = UserServiceFactory.getUserService();
+
+        Key listKey = KeyFactory.createKey("ListListContent", listName);
+        DatastoreService datastore = DatastoreServiceFactory
+                .getDatastoreService();
+
+
+        Entity currList = datastore.get(listKey);
+        currList.setProperty("user", user);
+        currList.setProperty("listNameInput", listName);
+        currList.setProperty("listContent", content);
+        datastore.put(currList);
+
+        return "redirect:/edit";
+    }
+
+
 }
+
+
 

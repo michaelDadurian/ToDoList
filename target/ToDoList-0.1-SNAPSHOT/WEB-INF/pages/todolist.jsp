@@ -85,7 +85,7 @@
 <%-- Start of display list  --%>
 
 <div name= "displayList">
-    
+
 
     <%
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -125,21 +125,20 @@
                 <%
                     if(ListList.getProperty("user").equals(user)){
                 %>
-<<<<<<< HEAD
-                    <form style = "display:inline">
-                        <button name = "edit_btn">edit</button>
+
+                <%-- Need to go to edit jsp page, controller will take input from edit page --%>
+                    <form action = "/edit" style = "display:inline">
+                        <input type = "hidden" name = "user" value = "${user}">
+                        <input type = "hidden" name = "listNameInput" value = "${listName}">
+                        <input type = "hidden" name = "listVisibility" value = "${listVisibility}">
+                        <input type = "submit" class = "edit_btn" value = "edit">
                     </form>
                     <form action="/deleteList" method="post" style = "display:inline">
                         <input type = "hidden" name = "listDelHid" value = "${fn:escapeXml(listName)}">
                         <input type = "submit" class = "delete_btn" value = "delete">
                     </form>
-=======
-                    <form action="/edit" method="get">
-                        <button class="edit_btn">edit</button>
-                    </form>
-                    <button class="delete_btn">delete</button>
+                    
 
->>>>>>> d45a856a6c35b80e17dc1900862fe22b1769b745
                 <%}%>
                 </td>
               </tr>
