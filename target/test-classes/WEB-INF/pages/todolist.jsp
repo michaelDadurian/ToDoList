@@ -89,9 +89,9 @@
 
     <%
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Key todolistKey = KeyFactory.createKey("ListList", "ass");
-        Query query = new Query("ListList", todolistKey);
-        List<Entity> lists = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(5));
+        Key todolistKey = KeyFactory.createKey("ListList", listName);
+        Query query = new Query("ListList");
+        List<Entity> lists = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(100));
         if (lists.isEmpty()){
     %>
 
@@ -99,11 +99,15 @@
     <%
         }else {
             for (Entity ListList : lists){
-                if (ListList.getProperty("listVisibility") == "public"){
+                if (ListList.getProperty("Visibility").equals("public")){
                     pageContext.setAttribute("listName", ListList.getProperty("ListName"));
+                    pageContext.setAttribute("listVisibility", ListList.getProperty("Visibility"));
+                    pageContext.setAttribute("user", ListList.getProperty("user"));
 
     %>
-                <p>name of list: '${fn:escapeXml(listName)}'</p>
+                <p>name of list: '${fn:escapeXml(listName)}'
+                   visibility: '${fn:escapeXml(listVisibility)}'
+                   user: '${fn:escapeXml(user)}'</p>
 
     <%     }
         }
