@@ -125,6 +125,7 @@
                 <%
                     if(ListList.getProperty("user").equals(user)){
                 %>
+                    <%-- Need to go to edit jsp page, controller will take input from edit page --%>
                     <form action="/edit" method="get">
                         <button class="edit_btn">edit</button>
                     </form>
