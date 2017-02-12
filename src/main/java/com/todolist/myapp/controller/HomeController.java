@@ -40,7 +40,6 @@ public class HomeController {
     public String listAdder(
             @RequestParam(required = true, value = "listNameInput") String listName,
             @RequestParam(required = true, value = "listVisibility") String visibility,
-
             Model model) {
         UserService userService = UserServiceFactory.getUserService();
 
@@ -55,8 +54,7 @@ public class HomeController {
         ListList.setProperty("ListName", listName);
         ListList.setProperty("Visibility", visibility);
 
-        DatastoreService datastore = DatastoreServiceFactory
-                .getDatastoreService();
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(ListList);
 
         return "redirect:/";
@@ -93,16 +91,6 @@ public class HomeController {
 
         UserService userService = UserServiceFactory.getUserService();
 
-        //Key listKey = KeyFactory.createKey("ListList", listName);
-        //DatastoreService datastore = DatastoreServiceFactory
-        //        .getDatastoreService();
-
-        //Entity currList = datastore.get(listKey);
-        //currList.setProperty("ListName", listName);
-        //currList.setProperty("Visibility", visibility);
-
-        //datastore.put(currList);
-
         return "edit";
 
     }
@@ -120,17 +108,17 @@ public class HomeController {
         UserService userService = UserServiceFactory.getUserService();
 
         Key listKey = KeyFactory.createKey("ListListContent", listName);
-        DatastoreService datastore = DatastoreServiceFactory
-                .getDatastoreService();
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 
-        Entity currList = datastore.get(listKey);
+        Entity currList = new Entity("ListListContent", listKey);
+
         currList.setProperty("user", user);
         currList.setProperty("listNameInput", listName);
         currList.setProperty("listContent", content);
         datastore.put(currList);
 
-        return "redirect:/edit";
+        return "redirect:/edit?";
     }
 
 

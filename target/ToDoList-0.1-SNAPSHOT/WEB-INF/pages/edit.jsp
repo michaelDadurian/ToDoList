@@ -23,13 +23,12 @@
 <h2> List: <%=request.getParameter("listNameInput")%> <h2>
 
 <%
-    String guestbookName = request.getParameter("guestbookName");
-    if (guestbookName == null) {
-        guestbookName = "default";
-    }
-    pageContext.setAttribute("guestbookName", guestbookName);
+    pageContext.setAttribute("listNameInput", request.getParameter("listNameInput"));
+
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
+    pageContext.setAttribute("user", user);
+
     if (user != null) {
         pageContext.setAttribute("user", user);
 %>
