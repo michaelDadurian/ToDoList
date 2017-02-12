@@ -91,12 +91,9 @@
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Key todolistKey = KeyFactory.createKey("ListList", listName);
         Query query = new Query("ListList");
-<<<<<<< HEAD
-        List<Entity> lists = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(100));
-=======
-        List<Entity> lists = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(1111111));
 
->>>>>>> 21c3a4e085ec2690f229a16b391334c39aca6826
+        List<Entity> lists = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(100));
+
         if (lists.isEmpty()){
     %>
 
@@ -104,30 +101,43 @@
 
     <%
         } else {
-            for (Entity ListList : lists){
-<<<<<<< HEAD
-                if (ListList.getProperty("Visibility").equals("public")){
-=======
-                if (ListList.getProperty("Visibility").equals("public") ||
-                    ListList.getProperty("user").equals(user)){
->>>>>>> 21c3a4e085ec2690f229a16b391334c39aca6826
+    %>
+
+          <p> <table id="list_info" border="1">
+              <tr>
+                <th>List Name</th>
+                <th>Visibility</th>
+                <th>Owner</th>
+              </tr>
+
+            <% for (Entity ListList : lists){
+
+                if (ListList.getProperty("Visibility").equals("public")|| ListList.getProperty("user").equals(user)){
                     pageContext.setAttribute("listName", ListList.getProperty("ListName"));
                     pageContext.setAttribute("listVisibility", ListList.getProperty("Visibility"));
                     pageContext.setAttribute("user", ListList.getProperty("user"));
 
-                    System.out.println(ListList.getProperty("ListName") + "\t" + ListList.getProperty("Visibility") +
-                        "\t" + user);
+            %>
 
-    %>
-<<<<<<< HEAD
-                <p>name of list: '${fn:escapeXml(listName)}'
-                   visibility: '${fn:escapeXml(listVisibility)}'
-                   user: '${fn:escapeXml(user)}'</p>
-=======
-                <tr><td>${fn:escapeXml(listName)}</td></tr><br>
->>>>>>> 21c3a4e085ec2690f229a16b391334c39aca6826
 
-    <%     }
+              <tr>
+                <td>'${fn:escapeXml(listName)}'</td>
+                <td>'${fn:escapeXml(listVisibility)}'</td>
+                <td>'${fn:escapeXml(user)}'</td>
+                    <%
+                        if(ListList.getProperty("user").equals(user)){
+                    %>
+                    <td> <button class="edit_btn">edit</button></td>
+                    <td> <button class="delete_btn">delete</button></td>
+              </tr>
+            </table>
+          </p>
+
+
+              
+
+    <%          }
+            }
         }
       }
 

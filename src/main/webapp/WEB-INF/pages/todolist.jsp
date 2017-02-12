@@ -101,22 +101,43 @@
 
     <%
         } else {
-            for (Entity ListList : lists){
+    %>
+
+          <p> <table id="list_info" border="1">
+              <tr>
+                <th>List Name</th>
+                <th>Visibility</th>
+                <th>Owner</th>
+              </tr>
+
+            <% for (Entity ListList : lists){
 
                 if (ListList.getProperty("Visibility").equals("public")|| ListList.getProperty("user").equals(user)){
                     pageContext.setAttribute("listName", ListList.getProperty("ListName"));
                     pageContext.setAttribute("listVisibility", ListList.getProperty("Visibility"));
                     pageContext.setAttribute("user", ListList.getProperty("user"));
 
-    %>
+            %>
 
-                <p>name of list: '${fn:escapeXml(listName)}'
-                   visibility: '${fn:escapeXml(listVisibility)}'
-                   user: '${fn:escapeXml(user)}'</p>
+
+              <tr>
+                <td>'${fn:escapeXml(listName)}'</td>
+                <td>'${fn:escapeXml(listVisibility)}'</td>
+                <td>'${fn:escapeXml(user)}'</td>
+                    <%
+                        if(ListList.getProperty("user").equals(user)){
+                    %>
+                    <td> <button class="edit_btn">edit</button></td>
+                    <td> <button class="delete_btn">delete</button></td>
+              </tr>
+            </table>
+          </p>
+
 
               
 
-    <%     }
+    <%          }
+            }
         }
       }
 
