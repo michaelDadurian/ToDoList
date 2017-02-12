@@ -48,6 +48,10 @@ public class HomeController {
             Model model) {
         UserService userService = UserServiceFactory.getUserService();
 
+        if(listName.equals("")){
+            return "redirect:/";
+        }
+
         Key listKey = KeyFactory.createKey("ListList", listName);
 
         Entity ListList = new Entity("ListList", listKey);
