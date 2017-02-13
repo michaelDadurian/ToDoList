@@ -15,6 +15,7 @@
 <html>
 <head>
     <link type="text/css" rel="stylesheet" href="/stylesheets/main.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -87,7 +88,7 @@
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query query = new Query("ListListContent");
 
-       // query.addFilter("listNameInput", Query.FilterOperator.EQUAL, listNameInput);
+        query.addFilter("listNameInput", Query.FilterOperator.EQUAL, listNameInput);
         query.addFilter("user", Query.FilterOperator.EQUAL, todouser);
         System.out.println("Datastore filter User "+user);
         List<Entity> lists = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(100));
@@ -115,11 +116,27 @@
                     </form>
 
                 </td>
+
+                <td><input type="button" value="move up" class="move up" /></td>
+                        <td><input type="button" value="move down" class="move down" /></td>
               </tr>
     <%
         } // end of for
     %>
           </table>
+
+          <script type="text/javascript">
+          $(document).ready(function(){
+              $('#list_info input.move').click(function() {
+                  var row = $(this).closest('tr');
+                  if ($(this).hasClass('up'))
+                      row.prev().before(row);
+                  else
+                      row.next().after(row);
+              });
+          });
+
+          </script>
 
 
     </form>
