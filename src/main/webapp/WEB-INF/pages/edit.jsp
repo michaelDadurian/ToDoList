@@ -78,6 +78,55 @@
 </div>
 <%-- End of adding new lists --%>
 
+<%-- Start of display list  --%>
+
+<div name= "displayList">
+
+
+    <%
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query query = new Query("ListListContent");
+
+        query.addFilter("listNameInput", Query.FilterOperator.EQUAL, listNameInput);
+        query.addFilter("user", Query.FilterOperator.EQUAL, todouser);
+        System.out.println("Datastore filter User "+user);
+        List<Entity> lists = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(100));
+
+    %>
+          <table id="list_info" border="1">
+            <tr>
+                <th>Content</th>
+                <th>Options</th>
+            </tr>
+            <%
+            for (Entity ListList : lists){
+                pageContext.setAttribute("listContent", ListList.getProperty("listContent"));
+            %>
+              <tr>
+                <td>${fn:escapeXml(listContent)}</td>
+                <td>
+
+                <%-- Need to go to edit jsp page, controller will take input from edit page --%>
+                    <form action = "/edit" style = "display:inline">
+                        <input type = "submit" class = "edit_btn" value = "edit">
+                    </form>
+                    <form action="/deleteList" method="post" style = "display:inline">
+                        <input type = "submit" class = "delete_btn" value = "delete">
+                    </form>
+
+                </td>
+              </tr>
+    <%
+        } // end of for
+    %>
+          </table>
+
+
+    </form>
+</div>
+
+<%-- End of display list  --%>
+
 
 
 
