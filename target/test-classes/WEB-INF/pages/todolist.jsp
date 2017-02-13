@@ -72,8 +72,6 @@
         Key listKey = KeyFactory.createKey("ListList", listName);
         // Run an ancestor query to ensure we see the most up-to-date
         Query listQuery = new Query("HelloList", listKey).addSort("date", Query.SortDirection.DESCENDING);
-
-
     %>
 
 
@@ -90,7 +88,14 @@
     <%
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Key todolistKey = KeyFactory.createKey("ListList", listName);
-        Query query = new Query("ListList");
+        Query query = query = new Query("ListList");
+        if(request.getParameter("colName") == null && request.getParameter("sortValue") == null){
+            query = new Query("ListList").addSort("ListName", Query.SortDirection.ASCENDING);
+        }else if(request.getParameter("sortValue").equals("asc")){
+            query = new Query("ListList").addSort(request.getParameter("colName"), Query.SortDirection.ASCENDING);
+        } else {
+            query = new Query("ListList").addSort(request.getParameter("colName"), Query.SortDirection.DESCENDING);
+        }
 
         List<Entity> lists = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(100));
 
@@ -105,12 +110,36 @@
 
           <table id="list_info" border="1">
             <tr>
-                <th>List Name</th>
-                <th>Visibility</th>
-                <th>Owner</th>
+                <th>
+                    <form name="form1" action = "/sort" method = "post">
+                        <input type = "hidden" name = "sortValue" value  = "${sortValue}">
+                        <input type = "hidden" name = "colName" value  = "ListName">
+                        <input name = "tableButton" type = "submit" value = "List Name">
+                    </form>
+                </th>
+                <th>
+                    <form name="form1" action = "/sort" method = "post">
+                        <input type = "hidden" name = "sortValue" value  = "${sortValue}">
+                        <input type = "hidden" name = "colName" value  = "Visibility">
+                        <input name = "tableButton" type = "submit" value = "Visibility">
+                    </form>
+                </th>
+                <th>
+                    <form name="form1" action = "/sort" method = "post">
+                        <input type = "hidden" name = "sortValue" value  = "${sortValue}">
+                        <input type = "hidden" name = "colName" value  = "user">
+                        <input name = "tableButton" type = "submit" value = "Owner">
+                    </form>
+                </th>
                 <th>Options</th>
             </tr>
             <%
+            /*
+            if(request.getParameter("tableButton") != null) {
+                colName = request.getParameter("tableButton")
+            }*/
+
+
             for (Entity ListList : lists){
                 if (ListList.getProperty("Visibility").equals("public")|| ListList.getProperty("user").equals(user)){
                     pageContext.setAttribute("listName", ListList.getProperty("ListName"));
