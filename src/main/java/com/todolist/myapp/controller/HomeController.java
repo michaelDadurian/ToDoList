@@ -128,6 +128,7 @@ public class HomeController {
 
     }
 
+    //to convert to date format
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
