@@ -16,6 +16,7 @@
 <head>
     <link type="text/css" rel="stylesheet" href="/stylesheets/main.css"/>
 </head>
+    <script src="http://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 
 <body>
 <h1>${welcomeMsg}</h1>
