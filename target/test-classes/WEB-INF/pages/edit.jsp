@@ -16,6 +16,20 @@
 <head>
     <link type="text/css" rel="stylesheet" href="/stylesheets/main.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+      <script type="text/javascript">
+      $(document).ready(function(){
+          $('#list_info input.move').click(function() {
+              var row = $(this).closest('tr');
+              if ($(this).hasClass('up'))
+                  row.prev().before(row);
+              else
+                  row.next().after(row);
+          });
+      });
+
+      </script>
+
 </head>
 
 <body>
@@ -94,11 +108,12 @@
         List<Entity> lists = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(100));
 
     %>
+        <tr>
+            <th>Content</th>
+            <th>Options</th>
+        </tr>
           <table id="list_info" border="1">
-            <tr>
-                <th>Content</th>
-                <th>Options</th>
-            </tr>
+
             <%
             for (Entity ListList : lists){
                 pageContext.setAttribute("listContent", ListList.getProperty("listContent"));
@@ -124,19 +139,6 @@
         } // end of for
     %>
           </table>
-
-          <script type="text/javascript">
-          $(document).ready(function(){
-              $('#list_info input.move').click(function() {
-                  var row = $(this).closest('tr');
-                  if ($(this).hasClass('up'))
-                      row.prev().before(row);
-                  else
-                      row.next().after(row);
-              });
-          });
-
-          </script>
 
 
     </form>
