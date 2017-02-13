@@ -3,8 +3,10 @@ package com.todolist.myapp.controller;
 import java.util.Date;
 
 import com.google.appengine.api.datastore.*;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,6 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class HomeController {
@@ -58,6 +62,31 @@ public class HomeController {
         datastore.put(ListList);
 
         return "redirect:/";
+
+    }
+
+    @RequestMapping("/editVisibility")
+    public ModelAndView editVisibility(HttpServletRequest request, ModelMap model) {
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+        String listName = request.getParameter("listNameHid");
+        String visibility = request.getParameter("listVisibility");
+
+        Query query = new Query("ListList");
+        query.addFilter("ListName", Query.FilterOperator.EQUAL, listName);
+        PreparedQuery pq = datastore.prepare(query);
+        Entity ListList = pq.asSingleEntity();
+
+        ListList.setProperty("ListName", listName);
+        ListList.setProperty("Visibility", visibility);
+
+
+        datastore.put(ListList);
+
+        ModelAndView mav = new ModelAndView("redirect:/");
+        //return to list
+        return mav;
 
     }
 
@@ -151,6 +180,23 @@ public class HomeController {
         mav.addObject("listNameInput", listName);
         mav.addObject("listContent", content);
 
+        return mav;
+
+    }
+
+
+    @RequestMapping("/sort")
+    public ModelAndView listListSort( @RequestParam(required = true, value = "sortValue") String sortValue,
+                                     @RequestParam(required = true, value = "colName") String colName
+    ) throws EntityNotFoundException {
+
+        ModelAndView mav = new ModelAndView("todolist");
+        if(sortValue.equals("asc"))
+            mav.addObject("sortValue", "des");
+        else
+            mav.addObject("sortValue", "asc");
+
+        mav.addObject("colName", colName);
         return mav;
 
     }
