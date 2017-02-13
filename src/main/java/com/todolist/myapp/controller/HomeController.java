@@ -156,6 +156,23 @@ public class HomeController {
     }
 
 
+    @RequestMapping("/sort")
+    public ModelAndView listListSort( @RequestParam(required = true, value = "sortValue") String sortValue,
+                                     @RequestParam(required = true, value = "colName") String colName
+    ) throws EntityNotFoundException {
+
+        ModelAndView mav = new ModelAndView("todolist");
+        if(sortValue.equals("asc"))
+            mav.addObject("sortValue", "des");
+        else
+            mav.addObject("sortValue", "asc");
+
+        mav.addObject("colName", colName);
+        return mav;
+
+    }
+
+
 }
 
 
