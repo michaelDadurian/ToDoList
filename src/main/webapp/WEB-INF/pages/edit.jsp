@@ -6,6 +6,7 @@
 <%@ page import="com.google.appengine.api.datastore.Key" %>
 <%@ page import="com.google.appengine.api.datastore.KeyFactory" %>
 <%@ page import="com.google.appengine.api.datastore.Query" %>
+<%@ page import="com.google.appengine.api.datastore.PreparedQuery" %>
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
@@ -59,34 +60,67 @@
     }
 %>
 
+<%
+    String todouser = request.getParameter("user");
+    if (todouser == null || todouser == "") {
+        todouser = "NULL user?";
+    }
+    pageContext.setAttribute("user", user);
+    System.out.println("current user: " + user);
+
+    String listNameInput = request.getParameter("listNameInput");
+    if (listNameInput == null || listNameInput == "") {
+        listNameInput = "NULL list name?";
+    }
+    pageContext.setAttribute("listNameInput", listNameInput);
+    System.out.println("current listNameInput: " + listNameInput);
+%>
+
 <%-- Start of adding new lists --%>
 
 <div name = "listNameTest">
 
-    <form action="/addToDo" method="post">
-        <h3>What would you like to do?<h3>
-        <div><textarea name="listContent" rows="3" cols="60"></textarea></div>
-        <input type = "hidden" name = "user" value = "${user}">
-        <input type = "hidden" name = "listNameInput" value = "${listNameInput}">
-        <input type = "hidden" name = "listContent" value = "${listContent}">
-        <div><input type="submit" value="Add ToDo"></div>
-    </form>
-
-    <%
-        String todouser = request.getParameter("user");
-        if (todouser == null || todouser == "") {
-            todouser = "NULL user?";
-        }
-        pageContext.setAttribute("user", user);
-        System.out.println("current user: " + user);
-
-        String listNameInput = request.getParameter("listNameInput");
-        if (listNameInput == null || listNameInput == "") {
-            listNameInput = "NULL list name?";
-        }
-        pageContext.setAttribute("listNameInput", listNameInput);
-        System.out.println("current listNameInput: " + listNameInput);
+    <% if(request.getParameter("currContent") == null){
     %>
+
+        <form action="/addToDo" method="post">
+            <h3>What would you like to do?<h3>
+            <div><textarea name="listContent" rows="3" cols="60"></textarea></div>
+            <input type = "hidden" name = "user" value = "${user}">
+            <input type = "hidden" name = "listNameInput" value = "${listNameInput}">
+            <!-- <input type = "hidden" name = "listContent" value = "${listContent}"> -->
+            <div><input type="submit" value="Add ToDo"></div>
+        </form>
+
+    <%}
+     else{
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query query = new Query("ListListContent");
+
+        Query theQuery = new Query("ListListContent");
+        theQuery.addFilter("user", Query.FilterOperator.EQUAL, user);
+        theQuery.addFilter("listNameInput", Query.FilterOperator.EQUAL, listNameInput);
+        theQuery.addFilter("listContent", Query.FilterOperator.EQUAL, request.getParameter("currContent"));
+
+        PreparedQuery pq = datastore.prepare(theQuery);
+        Entity listEntity = pq.asSingleEntity();
+
+     %>
+
+        <form action="/confirmEditContent" method="post">
+            <h3>Edit Content<h3>
+            <div><textarea name="listContent" rows="3" cols="60"><%=request.getParameter("currContent")%></textarea></div>
+            <input type = "hidden" name = "user" value = "${user}">
+            <input type = "hidden" name = "listNameInput" value = "${listNameInput}">
+            <!-- <input type = "hidden" name = "listContent" value = "${listContent}"> -->
+            <input type = "hidden" name = "currContent" value = "${currContent}">
+            <input type = "hidden" name = "visibility" value = "${listVisibility}">
+            <div><input type="submit" value="Confirm Edit"></div>
+        </form>
+
+
+    <%}%>
 
 
 
@@ -123,10 +157,17 @@
                 <td>
 
                 <%-- Need to go to edit jsp page, controller will take input from edit page --%>
-                    <form action = "/edit" style = "display:inline">
+                    <form action = "/editContent" style = "display:inline">
+                        <input type = "hidden" name = "user" value  = "${user}">
+                        <input type = "hidden" name = "listNameInput" value  = "${listNameInput}">
+                        <input type = "hidden" name = "currContent" value  = "${listContent}">
                         <input type = "submit" class = "edit_btn" value = "edit">
                     </form>
-                    <form action="/deleteList" method="post" style = "display:inline">
+                    <form action="/deleteContent" method="post" style = "display:inline">
+                        <input type = "hidden" name = "user" value  = "${user}">
+                        <input type = "hidden" name = "listNameInput" value  = "${listNameInput}">
+                        <input type = "hidden" name = "currContent" value  = "${listContent}">
+                        <input type = "hidden" name = "visibility" value = "${listVisibility}">
                         <input type = "submit" class = "delete_btn" value = "delete">
                     </form>
 

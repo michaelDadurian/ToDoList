@@ -1,6 +1,7 @@
 package com.todolist.myapp.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import com.google.appengine.api.datastore.*;
 import com.sun.org.apache.xpath.internal.operations.Mod;
@@ -124,33 +125,6 @@ public class HomeController {
 
     }
 
-    /*
-    @RequestMapping("/addToDo")
-    public String listAddToDo( @RequestParam(required = true, value = "user") String user,
-                               @RequestParam(required = true, value = "listNameInput") String listName,
-                               @RequestParam(required = true, value = "listContent") String content
-        ) throws EntityNotFoundException {
-
-        System.out.println("User "+user);
-        System.out.println("listNameInput "+listName);
-        System.out.println("listContent "+content);
-
-        UserService userService = UserServiceFactory.getUserService();
-
-        Key listKey = KeyFactory.createKey("ListListContent", listName);
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-
-        Entity currList = new Entity("ListListContent", listKey);
-
-        currList.setProperty("user", user);
-        currList.setProperty("listNameInput", listName);
-        currList.setProperty("listContent", content);
-        datastore.put(currList);
-
-        return "redirect:/edit?";
-    }
-    */
 
     @RequestMapping("/addToDo")
     public ModelAndView listAddToDo( @RequestParam(required = true, value = "user") String user,
@@ -167,18 +141,129 @@ public class HomeController {
         Key listKey = KeyFactory.createKey("ListListContent", listName);
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
+        Query query = new Query("ListListContent");
 
-        Entity currList = new Entity("ListListContent", listKey);
+        query.addFilter("listNameInput", Query.FilterOperator.EQUAL, listName);
+        query.addFilter("user", Query.FilterOperator.EQUAL, user);
+        query.addFilter("listContent", Query.FilterOperator.EQUAL, content);
+        System.out.println("Datastore filter User "+user);
+        List<Entity> lists = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(100));
 
-        currList.setProperty("user", user);
-        currList.setProperty("listNameInput", listName);
-        currList.setProperty("listContent", content);
-        datastore.put(currList);
+
+
+        if(lists.isEmpty()) {
+            Entity currList = new Entity("ListListContent", listKey);
+
+            currList.setProperty("user", user);
+            currList.setProperty("listNameInput", listName);
+            currList.setProperty("listContent", content);
+            datastore.put(currList);
+        }
 
         ModelAndView mav = new ModelAndView("edit");
         mav.addObject("user", user);
         mav.addObject("listNameInput", listName);
         mav.addObject("listContent", content);
+
+        return mav;
+
+    }
+
+    @RequestMapping("/editContent")
+    public ModelAndView listEditContent(    @RequestParam(required = true, value = "user") String user,
+                                            @RequestParam(required = true, value = "listNameInput") String listName,
+                                            @RequestParam(required = true, value = "currContent") String currContent
+    ) throws EntityNotFoundException {
+
+        System.out.println("User "+user);
+        System.out.println("listNameInput "+listName);
+        System.out.println("currContent "+currContent);
+
+        UserService userService = UserServiceFactory.getUserService();
+
+
+        ModelAndView mav = new ModelAndView("edit");
+        mav.addObject("user", user);
+        mav.addObject("listNameInput", listName);
+        mav.addObject("currContent", currContent);
+
+        return mav;
+
+    }
+
+    @RequestMapping("/confirmEditContent")
+    public ModelAndView listConfirmEditContent( @RequestParam(required = true, value = "user") String user,
+                                                @RequestParam(required = true, value = "listNameInput") String listName,
+                                                @RequestParam(required = true, value = "listContent") String listContent,
+                                                @RequestParam(required = true, value = "currContent") String currContent,
+                                                @RequestParam(required = true, value = "visibility") String visibility
+        ) throws EntityNotFoundException {
+
+        System.out.println("User "+user);
+        System.out.println("listNameInput "+listName);
+        System.out.println("content will be changed to: "+listContent);
+        System.out.println("currently the content in datastore is: "+currContent);
+
+        UserService userService = UserServiceFactory.getUserService();
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query deleteQuery = new Query("ListListContent");
+        deleteQuery.addFilter("listNameInput", Query.FilterOperator.EQUAL, listName);
+        deleteQuery.addFilter("user", Query.FilterOperator.EQUAL, user);
+        deleteQuery.addFilter("listContent", Query.FilterOperator.EQUAL, currContent);
+        PreparedQuery pq = datastore.prepare(deleteQuery);
+        Entity listEntity = pq.asSingleEntity();
+
+        datastore.delete(listEntity.getKey());
+
+        Key listKey = KeyFactory.createKey("ListListContent", listName);
+
+        Entity currList = new Entity("ListListContent", listKey);
+
+        currList.setProperty("user", user);
+        currList.setProperty("listNameInput", listName);
+        currList.setProperty("listContent", listContent);
+        datastore.put(currList);
+
+        ModelAndView mav = new ModelAndView("redirect:/edit");
+        mav.addObject("user", user);
+        mav.addObject("listNameInput", listName);
+        mav.addObject("listVisibility", visibility);
+
+        return mav;
+
+    }
+
+    @RequestMapping("/deleteContent")
+    public ModelAndView listDeleteContent(  @RequestParam(required = true, value = "user") String user,
+                                            @RequestParam(required = true, value = "listNameInput") String listName,
+                                            @RequestParam(required = true, value = "currContent") String currContent,
+                                            @RequestParam(required = true, value = "visibility") String visibility
+    ) throws EntityNotFoundException {
+
+        System.out.println("User "+user);
+        System.out.println("listNameInput "+listName);
+        System.out.println("currContent "+currContent);
+
+        UserService userService = UserServiceFactory.getUserService();
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query deleteQuery = new Query("ListListContent");
+        deleteQuery.addFilter("listNameInput", Query.FilterOperator.EQUAL, listName);
+        deleteQuery.addFilter("user", Query.FilterOperator.EQUAL, user);
+        deleteQuery.addFilter("listContent", Query.FilterOperator.EQUAL, currContent);
+        PreparedQuery pq = datastore.prepare(deleteQuery);
+        Entity listEntity = pq.asSingleEntity();
+
+        datastore.delete(listEntity.getKey());
+
+        Key listKey = KeyFactory.createKey("ListListContent", listName);
+
+
+        ModelAndView mav = new ModelAndView("redirect:/edit");
+        mav.addObject("user", user);
+        mav.addObject("listNameInput", listName);
+        mav.addObject("listVisibility", visibility);
 
         return mav;
 
