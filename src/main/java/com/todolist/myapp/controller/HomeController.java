@@ -67,6 +67,7 @@ public class HomeController {
 
     @RequestMapping("/editVisibility")
     public ModelAndView editVisibility(HttpServletRequest request, ModelMap model) {
+
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
         String listName = request.getParameter("listNameHid");
@@ -83,8 +84,9 @@ public class HomeController {
 
         datastore.put(ListList);
 
+        ModelAndView mav = new ModelAndView("redirect:/");
         //return to list
-        return new ModelAndView("redirect:/");
+        return mav;
 
     }
 
