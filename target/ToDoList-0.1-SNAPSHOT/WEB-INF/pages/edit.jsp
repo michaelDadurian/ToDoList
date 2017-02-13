@@ -87,6 +87,13 @@
         <form action="/addToDo" method="post">
             <h3>What would you like to do?<h3>
             <div><textarea name="listContent" rows="3" cols="60"></textarea></div>
+
+            Start Date:
+            <input type="date" name="startDate" id="startDate" value="${startDate}" >
+            End Date:
+            <input type="date" name="endDate" id="endDate" value="${endDate}">
+
+
             <input type = "hidden" name = "user" value = "${user}">
             <input type = "hidden" name = "listNameInput" value = "${listNameInput}">
             <!-- <input type = "hidden" name = "listContent" value = "${listContent}"> -->
@@ -103,6 +110,8 @@
         theQuery.addFilter("user", Query.FilterOperator.EQUAL, user);
         theQuery.addFilter("listNameInput", Query.FilterOperator.EQUAL, listNameInput);
         theQuery.addFilter("listContent", Query.FilterOperator.EQUAL, request.getParameter("currContent"));
+        theQuery.addFilter("startDate", Query.FilterOperator.EQUAL, request.getParameter("startDate"));
+        theQuery.addFilter("endDate", Query.FilterOperator.EQUAL, request.getParameter("endDate"));
 
         PreparedQuery pq = datastore.prepare(theQuery);
         Entity listEntity = pq.asSingleEntity();
@@ -112,6 +121,12 @@
         <form action="/confirmEditContent" method="post">
             <h3>Edit Content<h3>
             <div><textarea name="listContent" rows="3" cols="60"><%=request.getParameter("currContent")%></textarea></div>
+
+            Start Date:
+            <input type="date" name="startDate" id="startDate" value="${startDate}">
+            End Date:
+            <input type="date" name="endDate" id="endDate" value="${endDate}">
+
             <input type = "hidden" name = "user" value = "${user}">
             <input type = "hidden" name = "listNameInput" value = "${listNameInput}">
             <!-- <input type = "hidden" name = "listContent" value = "${listContent}"> -->
@@ -162,6 +177,8 @@
                         <input type = "hidden" name = "user" value  = "${user}">
                         <input type = "hidden" name = "listNameInput" value  = "${listNameInput}">
                         <input type = "hidden" name = "currContent" value  = "${listContent}">
+                        <input type = "hidden" name= "startDate" value = "${startDate}">
+                        <input type = "hidden" name= "endDate" value = "${endDate}">
                         <input type = "submit" class = "edit_btn" value = "edit">
                     </form>
                     <form action="/deleteContent" method="post" style = "display:inline">
@@ -175,7 +192,9 @@
                 </td>
 
                 <td><input type="button" value="move up" class="move up" /></td>
-                        <td><input type="button" value="move down" class="move down" /></td>
+                <td><input type="button" value="move down" class="move down" /></td>
+
+
               </tr>
     <%
         } // end of for

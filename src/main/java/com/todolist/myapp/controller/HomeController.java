@@ -1,13 +1,16 @@
 package com.todolist.myapp.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import com.google.appengine.api.datastore.*;
-import com.sun.org.apache.xpath.internal.operations.Mod;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -125,11 +128,19 @@ public class HomeController {
 
     }
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+        sdf.setLenient(true);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
+    }
 
     @RequestMapping("/addToDo")
     public ModelAndView listAddToDo( @RequestParam(required = true, value = "user") String user,
                                      @RequestParam(required = true, value = "listNameInput") String listName,
-                                     @RequestParam(required = true, value = "listContent") String content
+                                     @RequestParam(required = true, value = "listContent") String content,
+                                     @RequestParam(required = true, value = "startDate") Date startDate,
+                                     @RequestParam(required = true, value = "endDate") Date endDate
         ) throws EntityNotFoundException {
 
         System.out.println("User "+user);
@@ -146,6 +157,9 @@ public class HomeController {
         query.addFilter("listNameInput", Query.FilterOperator.EQUAL, listName);
         query.addFilter("user", Query.FilterOperator.EQUAL, user);
         query.addFilter("listContent", Query.FilterOperator.EQUAL, content);
+        query.addFilter("startDate", Query.FilterOperator.EQUAL, startDate);
+        query.addFilter("endDate", Query.FilterOperator.EQUAL, endDate);
+
         System.out.println("Datastore filter User "+user);
         List<Entity> lists = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(100));
 
@@ -157,6 +171,8 @@ public class HomeController {
             currList.setProperty("user", user);
             currList.setProperty("listNameInput", listName);
             currList.setProperty("listContent", content);
+            currList.setProperty("startDate", startDate);
+            currList.setProperty("endDate", endDate);
             datastore.put(currList);
         }
 
@@ -164,15 +180,22 @@ public class HomeController {
         mav.addObject("user", user);
         mav.addObject("listNameInput", listName);
         mav.addObject("listContent", content);
+        mav.addObject("startDate", startDate);
+        mav.addObject("endDate", endDate);
 
         return mav;
 
     }
 
+
+
     @RequestMapping("/editContent")
     public ModelAndView listEditContent(    @RequestParam(required = true, value = "user") String user,
                                             @RequestParam(required = true, value = "listNameInput") String listName,
                                             @RequestParam(required = true, value = "currContent") String currContent
+
+
+
     ) throws EntityNotFoundException {
 
         System.out.println("User "+user);
@@ -187,6 +210,7 @@ public class HomeController {
         mav.addObject("listNameInput", listName);
         mav.addObject("currContent", currContent);
 
+
         return mav;
 
     }
@@ -196,7 +220,10 @@ public class HomeController {
                                                 @RequestParam(required = true, value = "listNameInput") String listName,
                                                 @RequestParam(required = true, value = "listContent") String listContent,
                                                 @RequestParam(required = true, value = "currContent") String currContent,
-                                                @RequestParam(required = true, value = "visibility") String visibility
+                                                @RequestParam(required = true, value = "visibility") String visibility,
+                                                @RequestParam(required = true, value = "startDate") Date startDate,
+                                                @RequestParam(required = true, value = "endDate") Date endDate
+
         ) throws EntityNotFoundException {
 
         System.out.println("User "+user);
@@ -211,6 +238,9 @@ public class HomeController {
         deleteQuery.addFilter("listNameInput", Query.FilterOperator.EQUAL, listName);
         deleteQuery.addFilter("user", Query.FilterOperator.EQUAL, user);
         deleteQuery.addFilter("listContent", Query.FilterOperator.EQUAL, currContent);
+        //deleteQuery.addFilter("startDate", Query.FilterOperator.EQUAL, startDate);
+        //deleteQuery.addFilter("endDate", Query.FilterOperator.EQUAL, endDate);
+
         PreparedQuery pq = datastore.prepare(deleteQuery);
         Entity listEntity = pq.asSingleEntity();
 
@@ -223,6 +253,8 @@ public class HomeController {
         currList.setProperty("user", user);
         currList.setProperty("listNameInput", listName);
         currList.setProperty("listContent", listContent);
+        currList.setProperty("startDate", startDate);
+        currList.setProperty("endDate", endDate);
         datastore.put(currList);
 
         ModelAndView mav = new ModelAndView("redirect:/edit");
