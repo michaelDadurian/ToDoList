@@ -138,9 +138,21 @@
                         <input type = "submit" class = "delete_btn" value = "delete">
                     </form>
                     
+                </td>
+                <td>
+                    <form action="/editVisibility" method="post">
+
+                        <input type="radio" name="listVisibility" value="public"> Public
+                        <input type="radio" name="listVisibility" value="private" checked = "checked"> Private
+                        <input type= "hidden" name="listNameHid" value= "${fn:escapeXml(listName)}">
+                        <br>
+                        <input type="submit" name = "editVisibilitySubmit" value="Submit">
+
+                    </form>
 
                 <%}%>
                 </td>
+
               </tr>
     <%
             } // end of if
