@@ -87,7 +87,7 @@
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query query = new Query("ListListContent");
 
-       // query.addFilter("listNameInput", Query.FilterOperator.EQUAL, listNameInput);
+        query.addFilter("listNameInput", Query.FilterOperator.EQUAL, listNameInput);
         query.addFilter("user", Query.FilterOperator.EQUAL, todouser);
         System.out.println("Datastore filter User "+user);
         List<Entity> lists = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(100));
