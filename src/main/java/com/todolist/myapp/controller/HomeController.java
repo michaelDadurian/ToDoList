@@ -95,6 +95,7 @@ public class HomeController {
 
     }
 
+    /*
     @RequestMapping("/addToDo")
     public String listAddToDo( @RequestParam(required = true, value = "user") String user,
                                @RequestParam(required = true, value = "listNameInput") String listName,
@@ -119,6 +120,39 @@ public class HomeController {
         datastore.put(currList);
 
         return "redirect:/edit?";
+    }
+    */
+
+    @RequestMapping("/addToDo")
+    public ModelAndView listAddToDo( @RequestParam(required = true, value = "user") String user,
+                                     @RequestParam(required = true, value = "listNameInput") String listName,
+                                     @RequestParam(required = true, value = "listContent") String content
+        ) throws EntityNotFoundException {
+
+        System.out.println("User "+user);
+        System.out.println("listNameInput "+listName);
+        System.out.println("listContent "+content);
+
+        UserService userService = UserServiceFactory.getUserService();
+
+        Key listKey = KeyFactory.createKey("ListListContent", listName);
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+
+        Entity currList = new Entity("ListListContent", listKey);
+
+        currList.setProperty("user", user);
+        currList.setProperty("listNameInput", listName);
+        currList.setProperty("listContent", content);
+        datastore.put(currList);
+
+        ModelAndView mav = new ModelAndView("edit");
+        mav.addObject("user", user);
+        mav.addObject("listNameInput", listName);
+        mav.addObject("listContent", content);
+
+        return mav;
+
     }
 
 
