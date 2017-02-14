@@ -1,3 +1,4 @@
+<!-- Kenny Chan-->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.google.appengine.api.datastore.DatastoreService" %>
 <%@ page import="com.google.appengine.api.datastore.DatastoreServiceFactory" %>
@@ -35,14 +36,14 @@
         if (user != null) {
             pageContext.setAttribute("user", user);
     %>
-    <p>Hello, ${fn:escapeXml(user.nickname)}! (You can sign out
-        <a href="<%= userService.createLogoutURL("/") %>"><button class="button4" type="button" data-toggle="tooltip" title="Sign Out">&nbsp</button></a>.)</p>
+    <h2>Hello, ${fn:escapeXml(user.nickname)}!
+        <a href="<%= userService.createLogoutURL("/") %>"><button class="button4" type="button" data-toggle="tooltip" title="Sign Out">&nbsp</button></a></h2>
     <%
     } else {
     %>
-    <p>Hello!
-        <a href="<%= userService.createLoginURL("/loggedIn") %>">Sign In<button class="button4" type="button" data-toggle="tooltip" title="Sign In">&nbsp</button></a>
-        to include your name with greetings you post.</p>
+    <h2>Hello! Sign In to include your name with greetings you post
+        <a href="<%= userService.createLoginURL("/loggedIn") %>"><button class="button9" type="button" data-toggle="tooltip" title="Sign In">&nbsp</button></a>
+    </h2>
     <%
         }
     %>
@@ -51,7 +52,7 @@
 
 <%-- Start of adding new lists --%>
 
-<h2>To Do List</h2>
+<h3>To Do List</h3>
 <%
 if(userService.getCurrentUser() != null){
 %>
@@ -123,7 +124,8 @@ if(userService.getCurrentUser() != null){
     } else {
     %>
 
-    <table id="list_info" border="1" cellpadding="10">
+    <table class="table table-striped" border="1" cellpadding="10" style="background-color: #eee !important;">
+        <thead class="thead-default">
         <tr>
             <th>
                 <form name="form1" action = "/sort" method = "post">
@@ -148,6 +150,7 @@ if(userService.getCurrentUser() != null){
             </th>
             <th>Options</th>
         </tr>
+        </thead>
         <%
             /*
             if(request.getParameter("tableButton") != null) {

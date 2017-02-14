@@ -1,3 +1,5 @@
+<!-- Nelson Tsui-->
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.google.appengine.api.datastore.DatastoreService" %>
 <%@ page import="com.google.appengine.api.datastore.DatastoreServiceFactory" %>
@@ -49,14 +51,15 @@
     if (user != null) {
         pageContext.setAttribute("user", user);
 %>
-<p>Hello, ${fn:escapeXml(user.nickname)}! (You can
-    <a href="<%= userService.createLogoutURL("/") %>">sign out</a>.)</p>
+    <p>Hello, ${fn:escapeXml(user.nickname)}! You can also Sign Out
+        <a href="<%= userService.createLogoutURL("/") %>"><button class="button4" type="button" data-toggle="tooltip" title="Sign Out">&nbsp</button></a></p>
+
 <%
 } else {
 %>
-<p>Hello!
-    <a href="<%= userService.createLoginURL("/loggedIn") %>">Sign in</a>
-    to include your name with greetings you post.</p>
+    <p>Hello!
+        <a href="<%= userService.createLoginURL("/loggedIn") %>">Sign in</a>
+        to include your name with greetings you post.</p>
 <%
     }
 %>
@@ -85,22 +88,22 @@
     %>
 
         <form action="/addToDo" method="post">
-            <h3>Please Fill in New Item Details</h3>
+            <p>Please Fill in New Item Details</p>
 
              Content:
             <div><textarea name="listContent" rows="3" cols="60"></textarea></div>
 
-            Start Date (MM/dd/yyyy):
+            <p>Start Date (MM/dd/yyyy):</p>
             <input type="text" name="startDate" id="startDate" value="${startDate}" >
-            End Date (MM/dd/yyyy):
+            <p>End Date (MM/dd/yyyy):</p>
             <input type="text" name="endDate" id="endDate" value="${endDate}">
 
 
             <input type = "hidden" name = "user" value = "${user}">
             <input type = "hidden" name = "listNameInput" value = "${listNameInput}">
-            Category:
+            <p>Category:</p>
             <input type = "text" name = "category">
-            <div><input type="submit" value="Add ToDo"></div>
+            <div><input class="button3" type="submit" data-toggle="tooltip" title="Save ToDo" value=&nbsp;></div>
         </form>
 
     <%}
@@ -122,7 +125,7 @@
      %>
 
         <form action="/confirmEditContent" method="post">
-            <h3>Edit Content<h3>
+            <p>Edit Content<p>
             <div><textarea name="listContent" rows="3" cols="60"><%=request.getParameter("currContent")%></textarea></div>
 
             Start Date (MM/dd/yyyy):
@@ -149,7 +152,7 @@
 
             <input type = "hidden" name = "currContent" value = "${currContent}">
             <input type = "hidden" name = "visibility" value = "${listVisibility}">
-            <div><input type="submit" value="Confirm Edit"></div>
+                <div><input class="button3" type="submit" data-toggle="tooltip" title="Save Edit" value=&nbsp;></div>
         </form>
 
 
@@ -176,10 +179,16 @@
 
     %>
 
-          <table id="list_info" class="sortable" border="1">
-            <tr>
+    <table class="table table-striped sortable" border="1" cellpadding="10" style="background-color: #eee !important;">
+
+    <tr>
                 <th>Content</th>
-                <th>Options</th>
+                <th>Category</th>
+        <th>Completed</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+
+                <th></th>
             </tr>
             <%
             for (Entity ListList : lists){
@@ -192,6 +201,10 @@
             %>
               <tr>
                 <td>${fn:escapeXml(listContent)}</td>
+                  <td>${fn:escapeXml(category)}</td>
+                  <td>${fn:escapeXml(completed)}</td>
+                  <td>${fn:escapeXml(startDate)}</td>
+                  <td>${fn:escapeXml(endDate)}</td>
                 <td>
 
                 <%-- Need to go to edit jsp page, controller will take input from edit page --%>
@@ -203,20 +216,20 @@
                         <input type = "hidden" name = "endDate" value = "${endDate}">
                         <input type = "hidden" name = "category" value = "${category}">
                         <input type = "hidden" name = "completed" value = "${completed}">
-                        <input type = "submit" class = "edit_btn" value = "edit">
+                        <input class="button5" type="submit" data-toggle="tooltip" title="Edit Item" value=&nbsp;>
                     </form>
                     <form action="/deleteContent" method="post" style = "display:inline">
                         <input type = "hidden" name = "user" value  = "${user}">
                         <input type = "hidden" name = "listNameInput" value  = "${listNameInput}">
                         <input type = "hidden" name = "currContent" value  = "${listContent}">
                         <input type = "hidden" name = "visibility" value = "${listVisibility}">
-                        <input type = "submit" class = "delete_btn" value = "delete">
+                        <input class="button6" type="submit" data-toggle="tooltip" title="Remove" value=&nbsp;>
                     </form>
 
                 </td>
 
-                <td><input type="button" value="move up" class="move up" /></td>
-                <td><input type="button" value="move down" class="move down" /></td>
+                  <td><input type="button" class="button7 move up" data-toggle="tooltip" title="Move Up" value=&nbsp;></td>
+                  <td><input type="button" class="button8 move down" data-toggle="tooltip" title="Move Down" value=&nbsp;></td>
 
 
               </tr>

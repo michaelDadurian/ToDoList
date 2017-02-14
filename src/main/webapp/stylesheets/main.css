@@ -1,3 +1,4 @@
+/*Refath Hossan - Did CSS, helped on functionality and style in edit.jsp and todolist.jsp*/
 body {
     font-family: Verdana, Helvetica, sans-serif;
     background-color: #aaaaff !important;
@@ -81,7 +82,7 @@ h2{
 }
 .button5{
 
-    background: url(img/Add.png);
+    background: url(img/Export.png);
     background-repeat: no-repeat;
     background-size: cover;
     color: white;
@@ -92,6 +93,36 @@ h2{
 .button6{
 
     background: url(img/Remove.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    padding: 15px 20px 10px !important;
+    border-width: 5px !important;
+
+}
+.button7{
+
+    background: url(img/MoveUp.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    padding: 15px 20px 10px !important;
+    border-width: 5px !important;
+
+}
+.button8{
+
+    background: url(img/MoveDown.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    padding: 15px 20px 10px !important;
+    border-width: 5px !important;
+
+}
+.button9{
+
+    background: url(img/SignIn.png);
     background-repeat: no-repeat;
     background-size: cover;
     color: white;
