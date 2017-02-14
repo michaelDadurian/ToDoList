@@ -140,8 +140,8 @@ public class HomeController {
     public ModelAndView listAddToDo( @RequestParam(required = true, value = "user") String user,
                                      @RequestParam(required = true, value = "listNameInput") String listName,
                                      @RequestParam(required = true, value = "listContent") String content,
-                                     @RequestParam(required = true, value = "startDate") Date startDate,
-                                     @RequestParam(required = true, value = "endDate") Date endDate,
+                                     @RequestParam(required = true, value = "startDate") String startDate,
+                                     @RequestParam(required = true, value = "endDate") String endDate,
                                      @RequestParam(required = true, value = "category") String category
         ) throws EntityNotFoundException {
 
@@ -201,7 +201,10 @@ public class HomeController {
                                             @RequestParam(required = true, value = "listNameInput") String listName,
                                             @RequestParam(required = true, value = "currContent") String currContent,
                                             @RequestParam(required = true, value = "category") String category,
-                                            @RequestParam(required = true, value = "completed") String completed
+                                            @RequestParam(required = true, value = "completed") String completed,
+                                            @RequestParam(required = true, value = "startDate") String startDate,
+                                            @RequestParam(required = true, value = "endDate") String endDate
+
 
 
 
@@ -222,6 +225,8 @@ public class HomeController {
         mav.addObject("currContent", currContent);
         mav.addObject("category", category);
         mav.addObject("completed", completed);
+        mav.addObject("startDate", startDate);
+        mav.addObject("endDate", endDate);
 
 
         return mav;
@@ -234,8 +239,8 @@ public class HomeController {
                                                 @RequestParam(required = true, value = "listContent") String listContent,
                                                 @RequestParam(required = true, value = "currContent") String currContent,
                                                 @RequestParam(required = true, value = "visibility") String visibility,
-                                                @RequestParam(required = true, value = "startDate") Date startDate,
-                                                @RequestParam(required = true, value = "endDate") Date endDate,
+                                                @RequestParam(required = true, value = "startDate") String startDate,
+                                                @RequestParam(required = true, value = "endDate") String endDate,
                                                 @RequestParam(required = true, value = "category") String category,
                                                 @RequestParam(required = false, value = "completed") String completed
 

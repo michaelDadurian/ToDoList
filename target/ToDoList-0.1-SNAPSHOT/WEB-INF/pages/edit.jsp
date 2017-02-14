@@ -90,10 +90,10 @@
              Content:
             <div><textarea name="listContent" rows="3" cols="60"></textarea></div>
 
-            Start Date:
-            <input type="date" name="startDate" id="startDate" value="${startDate}" >
-            End Date:
-            <input type="date" name="endDate" id="endDate" value="${endDate}">
+            Start Date (MM/dd/yyyy):
+            <input type="text" name="startDate" id="startDate" value="${startDate}" >
+            End Date (MM/dd/yyyy):
+            <input type="text" name="endDate" id="endDate" value="${endDate}">
 
 
             <input type = "hidden" name = "user" value = "${user}">
@@ -125,10 +125,11 @@
             <h3>Edit Content<h3>
             <div><textarea name="listContent" rows="3" cols="60"><%=request.getParameter("currContent")%></textarea></div>
 
-            Start Date:
-            <input type="date" name="startDate" id="startDate" value="${startDate}">
-            End Date:
-            <input type="date" name="endDate" id="endDate" value="${endDate}">
+            Start Date (MM/dd/yyyy):
+            <input type="text" name="startDate"  value="${startDate}">
+            End Date (MM/dd/yyyy):
+            <input type="text" name="endDate" value="${endDate}">
+
 
             <input type = "hidden" name = "user" value = "${user}">
             <input type = "hidden" name = "listNameInput" value = "${listNameInput}">
@@ -185,6 +186,9 @@
                 pageContext.setAttribute("listContent", ListList.getProperty("listContent"));
                 pageContext.setAttribute("category", ListList.getProperty("category"));
                 pageContext.setAttribute("completed", ListList.getProperty("completed"));
+                pageContext.setAttribute("startDate", ListList.getProperty("startDate"));
+                pageContext.setAttribute("endDate", ListList.getProperty("endDate"));
+
             %>
               <tr>
                 <td>${fn:escapeXml(listContent)}</td>
