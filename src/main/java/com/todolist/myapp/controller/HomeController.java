@@ -57,13 +57,23 @@ public class HomeController {
 
         Key listKey = KeyFactory.createKey("ListList", listName);
 
-        Entity ListList = new Entity("ListList", listKey);
-        ListList.setProperty("user", userService.getCurrentUser());
-        ListList.setProperty("ListName", listName);
-        ListList.setProperty("Visibility", visibility);
-
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        datastore.put(ListList);
+
+        Query query = new Query("ListList");
+        query.addFilter("ListName", Query.FilterOperator.EQUAL, listName);
+        query.addFilter("user", Query.FilterOperator.EQUAL, userService.getCurrentUser());
+
+        List<Entity> lists = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(100));
+
+        if(lists.isEmpty()){
+            System.out.println(listName + " " + userService.getCurrentUser());
+            Entity ListList = new Entity("ListList", listKey);
+            ListList.setProperty("user", userService.getCurrentUser());
+            ListList.setProperty("ListName", listName);
+            ListList.setProperty("Visibility", visibility);
+
+            datastore.put(ListList);
+        }
 
         return "redirect:/";
 

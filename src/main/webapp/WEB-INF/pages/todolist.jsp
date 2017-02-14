@@ -24,6 +24,7 @@
     <h1>${welcomeMsg}</h1>
 
     <%
+        String listName = "llllllllllllllllllllllllllllllllllllllll213213gy3b21gbgbi";
         String guestbookName = request.getParameter("guestbookName");
         if (guestbookName == null) {
             guestbookName = "default";
@@ -51,7 +52,9 @@
 <%-- Start of adding new lists --%>
 
 <h2>To Do List</h2>
-
+<%
+if(userService.getCurrentUser() != null){
+%>
 <div class="ListNameBorder" style="width: 800px; border: 2px solid #3d37ff; padding: 25px; margin: 25px;" >
     <div name = "listNameTest">
         <form action="/add" method="post">
@@ -67,7 +70,7 @@
         </form>
 
         <%
-            String listName = request.getParameter("listNameInput");
+            listName = request.getParameter("listNameInput");
             if (listName == null || listName == "") {
                 listName = "defaultListName";
             }
@@ -85,6 +88,8 @@
 
     </div>
 </div>
+<%}
+%>
 <%-- End of adding new lists --%>
 
 
@@ -182,7 +187,7 @@
                 <form action="/editVisibility" method="post">
 
                     <input type="radio" name="listVisibility" value="public"> Public
-                    <input type="radio" name="listVisibility" value="private"> Private
+                    <input type="radio" name="listVisibility" value="private" checked = "checked"> Private
                     <input type= "hidden" name="listNameHid" value= "${fn:escapeXml(listName)}">
                     <br>
                     <input type="submit" name = "editVisibilitySubmit" value="Submit">
