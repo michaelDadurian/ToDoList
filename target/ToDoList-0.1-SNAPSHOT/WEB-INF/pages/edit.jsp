@@ -85,7 +85,7 @@
     %>
 
         <form action="/addToDo" method="post">
-            <h3>What would you like to do?<h3>
+            <h3>Please Fill in New Item Details</h3>
 
              Content:
             <div><textarea name="listContent" rows="3" cols="60"></textarea></div>
@@ -98,7 +98,8 @@
 
             <input type = "hidden" name = "user" value = "${user}">
             <input type = "hidden" name = "listNameInput" value = "${listNameInput}">
-            <!-- <input type = "hidden" name = "listContent" value = "${listContent}"> -->
+            Category:
+            <input type = "text" name = "category">
             <div><input type="submit" value="Add ToDo"></div>
         </form>
 
@@ -131,7 +132,20 @@
 
             <input type = "hidden" name = "user" value = "${user}">
             <input type = "hidden" name = "listNameInput" value = "${listNameInput}">
-            <!-- <input type = "hidden" name = "listContent" value = "${listContent}"> -->
+
+            Category:
+            <input type = "text" name = "category" value = "${category}">
+
+            Completed?
+
+            <% if(request.getParameter("completed") != ""){ %>
+            <input type = "checkbox" name = "completed" value = "${completed}" checked>
+            <% } else{ %>
+            <input type = "checkbox" name = "completed" value = "${completed}">
+            <% } %>
+
+
+
             <input type = "hidden" name = "currContent" value = "${currContent}">
             <input type = "hidden" name = "visibility" value = "${listVisibility}">
             <div><input type="submit" value="Confirm Edit"></div>
@@ -169,6 +183,8 @@
             <%
             for (Entity ListList : lists){
                 pageContext.setAttribute("listContent", ListList.getProperty("listContent"));
+                pageContext.setAttribute("category", ListList.getProperty("category"));
+                pageContext.setAttribute("completed", ListList.getProperty("completed"));
             %>
               <tr>
                 <td>${fn:escapeXml(listContent)}</td>
@@ -179,8 +195,10 @@
                         <input type = "hidden" name = "user" value  = "${user}">
                         <input type = "hidden" name = "listNameInput" value  = "${listNameInput}">
                         <input type = "hidden" name = "currContent" value  = "${listContent}">
-                        <input type = "hidden" name= "startDate" value = "${startDate}">
-                        <input type = "hidden" name= "endDate" value = "${endDate}">
+                        <input type = "hidden" name = "startDate" value = "${startDate}">
+                        <input type = "hidden" name = "endDate" value = "${endDate}">
+                        <input type = "hidden" name = "category" value = "${category}">
+                        <input type = "hidden" name = "completed" value = "${completed}">
                         <input type = "submit" class = "edit_btn" value = "edit">
                     </form>
                     <form action="/deleteContent" method="post" style = "display:inline">

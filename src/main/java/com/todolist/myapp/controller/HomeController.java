@@ -141,12 +141,14 @@ public class HomeController {
                                      @RequestParam(required = true, value = "listNameInput") String listName,
                                      @RequestParam(required = true, value = "listContent") String content,
                                      @RequestParam(required = true, value = "startDate") Date startDate,
-                                     @RequestParam(required = true, value = "endDate") Date endDate
+                                     @RequestParam(required = true, value = "endDate") Date endDate,
+                                     @RequestParam(required = true, value = "category") String category
         ) throws EntityNotFoundException {
 
         System.out.println("User "+user);
         System.out.println("listNameInput "+listName);
         System.out.println("listContent "+content);
+        System.out.println("category: "+category);
 
         UserService userService = UserServiceFactory.getUserService();
 
@@ -158,8 +160,9 @@ public class HomeController {
         query.addFilter("listNameInput", Query.FilterOperator.EQUAL, listName);
         query.addFilter("user", Query.FilterOperator.EQUAL, user);
         query.addFilter("listContent", Query.FilterOperator.EQUAL, content);
-        query.addFilter("startDate", Query.FilterOperator.EQUAL, startDate);
-        query.addFilter("endDate", Query.FilterOperator.EQUAL, endDate);
+        //query.addFilter("startDate", Query.FilterOperator.EQUAL, startDate);
+        //query.addFilter("endDate", Query.FilterOperator.EQUAL, endDate);
+        //query.addFilter("category", Query.FilterOperator.EQUAL, category);
 
         System.out.println("Datastore filter User "+user);
         List<Entity> lists = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(100));
@@ -174,6 +177,8 @@ public class HomeController {
             currList.setProperty("listContent", content);
             currList.setProperty("startDate", startDate);
             currList.setProperty("endDate", endDate);
+            currList.setProperty("category", category);
+            currList.setProperty("completed", false);
             datastore.put(currList);
         }
 
@@ -183,6 +188,7 @@ public class HomeController {
         mav.addObject("listContent", content);
         mav.addObject("startDate", startDate);
         mav.addObject("endDate", endDate);
+        mav.addObject("category", category);
 
         return mav;
 
@@ -193,7 +199,9 @@ public class HomeController {
     @RequestMapping("/editContent")
     public ModelAndView listEditContent(    @RequestParam(required = true, value = "user") String user,
                                             @RequestParam(required = true, value = "listNameInput") String listName,
-                                            @RequestParam(required = true, value = "currContent") String currContent
+                                            @RequestParam(required = true, value = "currContent") String currContent,
+                                            @RequestParam(required = true, value = "category") String category,
+                                            @RequestParam(required = true, value = "completed") String completed
 
 
 
@@ -202,6 +210,8 @@ public class HomeController {
         System.out.println("User "+user);
         System.out.println("listNameInput "+listName);
         System.out.println("currContent "+currContent);
+        System.out.println("category "+category);
+        System.out.println("completed "+completed);
 
         UserService userService = UserServiceFactory.getUserService();
 
@@ -210,6 +220,8 @@ public class HomeController {
         mav.addObject("user", user);
         mav.addObject("listNameInput", listName);
         mav.addObject("currContent", currContent);
+        mav.addObject("category", category);
+        mav.addObject("completed", completed);
 
 
         return mav;
@@ -223,7 +235,11 @@ public class HomeController {
                                                 @RequestParam(required = true, value = "currContent") String currContent,
                                                 @RequestParam(required = true, value = "visibility") String visibility,
                                                 @RequestParam(required = true, value = "startDate") Date startDate,
-                                                @RequestParam(required = true, value = "endDate") Date endDate
+                                                @RequestParam(required = true, value = "endDate") Date endDate,
+                                                @RequestParam(required = true, value = "category") String category,
+                                                @RequestParam(required = false, value = "completed") String completed
+
+
 
         ) throws EntityNotFoundException {
 
@@ -231,6 +247,7 @@ public class HomeController {
         System.out.println("listNameInput "+listName);
         System.out.println("content will be changed to: "+listContent);
         System.out.println("currently the content in datastore is: "+currContent);
+        System.out.println("ConfirmEditContent completed: "+completed);
 
         UserService userService = UserServiceFactory.getUserService();
 
@@ -256,6 +273,13 @@ public class HomeController {
         currList.setProperty("listContent", listContent);
         currList.setProperty("startDate", startDate);
         currList.setProperty("endDate", endDate);
+        currList.setProperty("category", category);
+        if(completed == null){
+            currList.setProperty("completed", false);
+        }else{
+            currList.setProperty("completed", true);
+        }
+
         datastore.put(currList);
 
         ModelAndView mav = new ModelAndView("redirect:/edit");
