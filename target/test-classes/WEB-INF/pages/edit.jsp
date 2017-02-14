@@ -86,6 +86,8 @@
 
         <form action="/addToDo" method="post">
             <h3>What would you like to do?<h3>
+
+             Content:
             <div><textarea name="listContent" rows="3" cols="60"></textarea></div>
 
             Start Date:

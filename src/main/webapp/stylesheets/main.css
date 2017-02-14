@@ -1,6 +1,103 @@
 body {
     font-family: Verdana, Helvetica, sans-serif;
-    background-color: #AAAAE1;
+    background-color: #aaaaff !important;
+
+}
+li {
+    display: inline;
+}
+
+h2{
+    font-size: 40px;
+}
+.ListNameBorder{
+    width: 300px;
+    border: 25px #463aff;
+    padding: 20px;
+    margin: 20px;
+}
+.wrapHover {
+    position: relative;
+    height:25px;
+    width:300px;
+
+
+}
+.wrapHoverDesc {
+    font: 14px/1.4 "Times New Roman";
+    position: absolute;
+    background: #000;
+    color: #fff;
+    visibility: hidden;
+    opacity:0;
+    -webkit-border-radius: 10px;
+    border-radius: 20px;
+
+}
+.button1:hover .wrapHoverDesc{
+    visibility: visible;
+    opacity: .8;
+
+}
+.button1{
+
+    background: url(img/Open.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    padding: 15px 20px 10px !important;
+    border-width: 5px !important;
+
+}
+.button2{
+
+    background: url(img/New.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    padding: 15px 20px 10px !important;
+    border-width: 5px !important;
+
+}
+.button3{
+
+    background: url(img/Save.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    padding: 15px 20px 10px !important;
+    border-width: 5px !important;
+
+}
+.button4{
+
+    background: url(img/Exit.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    padding: 15px 20px 10px !important;
+    border-width: 5px !important;
+
+}
+.button5{
+
+    background: url(img/Add.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    padding: 15px 20px 10px !important;
+    border-width: 5px !important;
+
+}
+.button6{
+
+    background: url(img/Remove.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    padding: 15px 20px 10px !important;
+    border-width: 5px !important;
+
 }
 
 input[name=tableButton] {
